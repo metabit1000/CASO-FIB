@@ -1,0 +1,38 @@
+Àlex Aguilera
+Miguel Fernández
+
+Práctica Mach i GNU Hurd.
+
+RESPUESTAS:
+5. 
+	1. Cada llamada de host_processors, asigna 0x1000.
+	2. Cada llamada de vm_map, asigna 0x2000.
+	3. Para host_processors: 0x1033000, 0x12e5000, 0x12e8000, 0x12eb000
+	   y para vm_map: 0x12e3000, 0x12e6000, 0x12e9000, 0x12ec000.
+	4. Se puede observar que son consecutivas y se van entrelazando, menos la primera
+	   que no sabemos porque lo hace diferente. Hemos aumentado a 32 iteraciones para verlo
+	   un poco mejor.
+	5. Buscando por internet, se encuentra lo siguiente:
+		#define	VM_PROT_NONE	((vm_prot_t) 0x00)
+		#define VM_PROT_READ	((vm_prot_t) 0x01)	/* read permission */
+		#define VM_PROT_WRITE	((vm_prot_t) 0x02)	/* write permission */
+		#define VM_PROT_EXECUTE	((vm_prot_t) 0x04)
+		#define VM_PROT_DEFAULT	(VM_PROT_READ|VM_PROT_WRITE)
+		#define VM_PROT_ALL	(VM_PROT_READ|VM_PROT_WRITE|VM_PROT_EXECUTE) 
+		#define VM_PROT_NO_CHANGE	((vm_prot_t) 0x08)
+		#define VM_PROT_COPY            ((vm_prot_t) 0x10)
+	6. Nos sale un Segmentation Fault. Para ponerlo como solo lectura, hemos 
+	   modificado la función vm_map, poniendo "VM_PROT_READ".
+	7. Para solucionarlo con la función vm_protect(), hemos añadido lo siguiente al
+	   código: res = vm_protect(mach_task_self(), (vm_address_t) p, 8192, 0, VM_PROT_DEFAULT);
+
+8. Código en ex8.c. No aparece ningún error de compilación, pero al ejecutar nos sale un Segmentation Fault. Hemos
+estado un buen rato probando y buscando el porque del error, pero sin éxito.
+
+9. La función mach_setup_thread() le da al thread una pila y la configura para que se ejecute con el PC cuando se reanude.
+Mientras que, mach_setup_tls() le da al thread una zona TLS (thread-local storage)
+
+10. Código en ex10.c.
+
+12. Código en ex12.c. Se ha intentado.
+
